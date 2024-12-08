@@ -169,6 +169,17 @@ INSERT INTO Feedback VALUES (1, 1, 5, 'Great stay! The room was perfect and the 
 INSERT INTO Feedback VALUES (2, 2, 4, 'Nice room, but the Wi-Fi was a bit slow.', SYSDATE);
 INSERT INTO Feedback VALUES (3, 3, 3, 'The room was okay, but the air conditioning didn’t work well.', SYSDATE);
 
+-- Insert into Event
+INSERT INTO Event VALUES (1, 'Annual Gala', 'Social', 'Grand Hall', TO_DATE('2024-12-20', 'YYYY-MM-DD'), 200, 'John Doe', 'john.doe@example.com', '9876543210', 1);
+INSERT INTO Event VALUES (2, 'Music Festival', 'Concert', 'Main Stage', TO_DATE('2024-12-25', 'YYYY-MM-DD'), 500, 'Jane Smith', 'jane.smith@example.com', '1234567890', 2);
+INSERT INTO Event VALUES (3, 'Tech Conference', 'Conference', 'Tech Hub', TO_DATE('2025-01-10', 'YYYY-MM-DD'), 300, 'Alice Brown', 'alice.brown@example.com', '1122334455', 3);
+
+
+-- Insert into Employee
+INSERT INTO Employee VALUES (1, 'Omar Ali', TO_DATE('2020-01-01', 'YYYY-MM-DD'), 5000.00, '1234567890', 'omar.ali@example.com');
+INSERT INTO Employee VALUES (2, 'Mona Ahmed', TO_DATE('2019-06-15', 'YYYY-MM-DD'), 4500.00, '2345678901', 'mona.ahmed@example.com');
+INSERT INTO Employee VALUES (3, 'Sara Youssef', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 6000.00, '3456789012', 'sara.youssef@example.com');
+
 
 ALTER TABLE Booking
 ADD room_Id NUMBER;
