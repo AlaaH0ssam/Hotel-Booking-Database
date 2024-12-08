@@ -99,6 +99,7 @@ CREATE TABLE Department (
     Name VARCHAR2(50),
     Number_Of_Employees NUMBER
 );
+
 -- Create the Feedback table
 CREATE TABLE Feedback (
     feedback_Id NUMBER PRIMARY KEY,
@@ -107,6 +108,21 @@ CREATE TABLE Feedback (
     comments VARCHAR2(500),
     feedback_date DATE DEFAULT SYSDATE, 
     CONSTRAINT fk_feedback_booking FOREIGN KEY (booking_Id) REFERENCES Booking(booking_Id)
+);
+
+-- Create the Event table
+CREATE TABLE Event (
+    event_Id NUMBER PRIMARY KEY,
+    name VARCHAR2(100),
+    type VARCHAR2(50),
+    location VARCHAR2(100),
+    event_date DATE,  -- Changed 'date' to 'event_date' to avoid conflict with reserved word 'DATE'
+    number_of_audience NUMBER,
+    organizer_name VARCHAR2(100),
+    organizer_email VARCHAR2(100),
+    organizer_phone VARCHAR2(15),
+    guest_id NUMBER,  -- Changed 'id' to 'guest_id' to match the foreign key reference
+    CONSTRAINT fk_event_guest FOREIGN KEY (guest_id) REFERENCES Guest(Guest_Id)
 );
 -- Insert into GUEST 
 INSERT INTO Guest VALUES (1, 'Omar', 'Ahmed', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'omar.ahmed@example.com', 'US', '1234567890', 'American');
