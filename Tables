@@ -148,6 +148,12 @@ INSERT INTO Payment VALUES (1, TO_DATE('2024-12-02', 'YYYY-MM-DD'), 'Credit Card
 INSERT INTO Payment VALUES (2, TO_DATE('2024-12-03', 'YYYY-MM-DD'), 'Cash', 150.00, 'Pending', 2);
 INSERT INTO Payment VALUES (3, TO_DATE('2024-12-06', 'YYYY-MM-DD'), 'Debit Card', 100.00, 'Paid', 3);
 
+-- Insert into Feedback
+INSERT INTO Feedback VALUES (1, 1, 5, 'Great stay! The room was perfect and the staff was very friendly.', SYSDATE);
+INSERT INTO Feedback VALUES (2, 2, 4, 'Nice room, but the Wi-Fi was a bit slow.', SYSDATE);
+INSERT INTO Feedback VALUES (3, 3, 3, 'The room was okay, but the air conditioning didn’t work well.', SYSDATE);
+
+
 ALTER TABLE Booking
 ADD room_Id NUMBER;
 
