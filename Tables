@@ -1,0 +1,163 @@
+-- Create the GUEST table
+CREATE TABLE Guest (
+    Guest_Id NUMBER PRIMARY KEY,
+    Fname VARCHAR2(50),
+    Lname VARCHAR2(50),
+    date_of_birth DATE,
+    email VARCHAR2(100),
+    country_key VARCHAR2(5),
+    phone_number VARCHAR2(15),
+    nationality VARCHAR2(50)
+);
+
+-- Create the ROOM table
+CREATE TABLE Room (
+    room_Id NUMBER PRIMARY KEY,
+    capacity NUMBER,
+    Price NUMBER(10, 2),
+    Type VARCHAR2(50),
+    Room_view VARCHAR2(100),
+    Availability VARCHAR2(10)
+);
+
+-- Create the BOOKING table
+CREATE TABLE Booking (
+    booking_Id NUMBER PRIMARY KEY,
+    checking_in_date DATE,
+    checking_out_date DATE,
+    booking_date DATE,
+    number_of_guests NUMBER,
+    status VARCHAR2(20),
+    duration NUMBER,
+    Guest_Id NUMBER,
+    CONSTRAINT fk_booking_guest FOREIGN KEY (Guest_Id) REFERENCES Guest(Guest_Id)
+);
+
+-- Create the PAYMENT table
+CREATE TABLE Payment (
+    payment_Id NUMBER PRIMARY KEY,
+    payment_Date DATE,
+    Payment_Method VARCHAR2(50),
+    Price NUMBER(10, 2),
+    status VARCHAR2(20),
+    Booking_Id NUMBER,
+    CONSTRAINT fk_payment_booking FOREIGN KEY (Booking_Id) REFERENCES Booking(booking_Id)
+);
+-- Create the MAINTENANCE table
+CREATE TABLE Maintenance (
+    maintenance_Id NUMBER PRIMARY KEY,
+    cost NUMBER(10, 2),
+    status VARCHAR2(50),
+    description VARCHAR2(200),
+    date_issue_reported DATE,
+    date_issue_solved DATE,
+    room_Id NUMBER,
+    CONSTRAINT fk_maintenance_room FOREIGN KEY (room_Id) REFERENCES Room(room_Id)
+);
+-- Create the SERVICE table
+CREATE TABLE Service (
+    service_Id NUMBER PRIMARY KEY,
+    name VARCHAR2(50),
+    Price NUMBER(10, 2),
+    description VARCHAR2(200),
+    Booking_Id NUMBER,
+    CONSTRAINT fk_service_booking FOREIGN KEY (Booking_Id) REFERENCES Booking(booking_Id)
+);
+
+-- Create the SUPPLIER table
+CREATE TABLE Supplier (
+    Supplier_Id NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    email VARCHAR2(100),
+    Phone VARCHAR2(15),
+    Address VARCHAR2(200)
+);
+
+-- Create the ITEM table
+CREATE TABLE Item (
+    Item_Id NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    Price NUMBER(10, 2),
+    Quantity NUMBER,
+    Supplier_Id NUMBER,
+    CONSTRAINT fk_item_supplier FOREIGN KEY (Supplier_Id) REFERENCES Supplier(Supplier_Id)
+);
+
+-- Create the EMPLOYEE table
+CREATE TABLE Employee (
+    Employee_Id NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    Start_Date DATE,
+    Salary NUMBER(10, 2),
+    Phone VARCHAR2(15),
+    email VARCHAR2(100)
+);
+
+-- Create the DEPARTMENT table
+CREATE TABLE Department (
+    Department_Id NUMBER PRIMARY KEY,
+    Name VARCHAR2(50),
+    Number_Of_Employees NUMBER
+);
+
+-- Insert into GUEST 
+INSERT INTO Guest VALUES (1, 'Omar', 'Ahmed', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'omar.ahmed@example.com', 'US', '1234567890', 'American');
+INSERT INTO Guest VALUES (2, 'Jana', 'Waeel', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 'jana.waeel@example.com', 'US', '0987654321', 'American');
+INSERT INTO Guest VALUES (3, 'Ahmed', 'Mohamed', TO_DATE('1982-07-25', 'YYYY-MM-DD'), 'ahmed.mohamed@example.com', 'UK', '1122334455', 'British');
+
+-- Insert into ROOM 
+INSERT INTO Room VALUES (101, 2, 100.00, 'Deluxe', 'Sea View', 'Available');
+INSERT INTO Room VALUES (102, 4, 200.00, 'Suite', 'Mountain View', 'Occupied');
+INSERT INTO Room VALUES (103, 1, 80.00, 'Standard', 'City View', 'Available');
+
+-- Insert into SUPPLIER
+INSERT INTO Supplier VALUES (1, 'ABC Suppliers', 'abc@example.com', '1231231234', '123 Supplier St.');
+INSERT INTO Supplier VALUES (2, 'XYZ Supplies', 'xyz@example.com', '2342342345', '456 Supply Rd.');
+INSERT INTO Supplier VALUES (3, 'DEF Suppliers', 'def@example.com', '3453453456', '789 Supply Ave.');
+
+-- Insert into ITEM 
+INSERT INTO Item VALUES (1, 'Bed', 50.00, 10, 1);
+INSERT INTO Item VALUES (2, 'Table', 30.00, 20, 2);
+INSERT INTO Item VALUES (3, 'Chair', 15.00, 30, 3);
+
+-- Insert into BOOKING
+INSERT INTO Booking VALUES (1, TO_DATE('2024-12-01', 'YYYY-MM-DD'), TO_DATE('2024-12-10', 'YYYY-MM-DD'), TO_DATE('2024-12-01', 'YYYY-MM-DD'), 2, 'Confirmed', 9, 1);
+INSERT INTO Booking VALUES (2, TO_DATE('2024-12-05', 'YYYY-MM-DD'), TO_DATE('2024-12-08', 'YYYY-MM-DD'), TO_DATE('2024-12-02', 'YYYY-MM-DD'), 3, 'Pending', 3, 2);
+INSERT INTO Booking VALUES (3, TO_DATE('2024-12-10', 'YYYY-MM-DD'), TO_DATE('2024-12-15', 'YYYY-MM-DD'), TO_DATE('2024-12-05', 'YYYY-MM-DD'), 5, 'Confirmed', 5, 3);
+
+-- Insert into MAINTENANCE
+INSERT INTO Maintenance VALUES (1, 100.00, 'In Progress', 'Leaky faucet', TO_DATE('2024-12-01', 'YYYY-MM-DD'), NULL, 101);
+INSERT INTO Maintenance VALUES (2, 200.00, 'Completed', 'Air conditioning repair', TO_DATE('2024-11-15', 'YYYY-MM-DD'), TO_DATE('2024-11-20', 'YYYY-MM-DD'), 102);
+INSERT INTO Maintenance VALUES (3, 150.00, 'Pending', 'Electrical issue', TO_DATE('2024-12-05', 'YYYY-MM-DD'), NULL, 103);
+
+-- Insert into SERVICE 
+INSERT INTO Service VALUES (1, 'Room Cleaning', 50.00, 'Daily room cleaning service', 1);
+INSERT INTO Service VALUES (2, 'Laundry', 20.00, 'Washing and drying clothes', 2);
+INSERT INTO Service VALUES (3, 'Food Delivery', 30.00, 'In-room dining service', 3);
+
+-- Insert into PAYMENT
+INSERT INTO Payment VALUES (1, TO_DATE('2024-12-02', 'YYYY-MM-DD'), 'Credit Card', 200.00, 'Paid', 1);
+INSERT INTO Payment VALUES (2, TO_DATE('2024-12-03', 'YYYY-MM-DD'), 'Cash', 150.00, 'Pending', 2);
+INSERT INTO Payment VALUES (3, TO_DATE('2024-12-06', 'YYYY-MM-DD'), 'Debit Card', 100.00, 'Paid', 3);
+
+ALTER TABLE Booking
+ADD room_Id NUMBER;
+
+ALTER TABLE Booking
+ADD CONSTRAINT fk_booking_room
+FOREIGN KEY (room_Id) REFERENCES Room(room_Id);
+
+UPDATE Booking
+SET room_Id = 101 
+WHERE booking_Id = 1;
+
+UPDATE Booking
+SET room_Id = 102 
+WHERE booking_Id = 2;
+
+
+UPDATE Booking
+SET room_Id = 103 
+WHERE booking_Id = 3;
+
+
