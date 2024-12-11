@@ -1,204 +1,260 @@
--- Create the GUEST table
-CREATE TABLE Guest (
-    Guest_Id NUMBER PRIMARY KEY,
-    Fname VARCHAR2(50),
-    Lname VARCHAR2(50),
-    date_of_birth DATE,
-    email VARCHAR2(100),
-    country_key VARCHAR2(5),
-    phone_number VARCHAR2(15),
-    nationality VARCHAR2(50)
-);
-
--- Create the ROOM table
-CREATE TABLE Room (
-    room_Id NUMBER PRIMARY KEY,
-    capacity NUMBER,
-    Price NUMBER(10, 2),
-    Type VARCHAR2(50),
-    Room_view VARCHAR2(100),
-    Availability VARCHAR2(10)
-);
-
--- Create the BOOKING table
-CREATE TABLE Booking (
-    booking_Id NUMBER PRIMARY KEY,
-    checking_in_date DATE,
-    checking_out_date DATE,
-    booking_date DATE,
-    number_of_guests NUMBER,
-    status VARCHAR2(20),
-    duration NUMBER,
-    Guest_Id NUMBER,
-    CONSTRAINT fk_booking_guest FOREIGN KEY (Guest_Id) REFERENCES Guest(Guest_Id)
-);
-
--- Create the PAYMENT table
-CREATE TABLE Payment (
-    payment_Id NUMBER PRIMARY KEY,
-    payment_Date DATE,
-    Payment_Method VARCHAR2(50),
-    Price NUMBER(10, 2),
-    status VARCHAR2(20),
-    Booking_Id NUMBER,
-    CONSTRAINT fk_payment_booking FOREIGN KEY (Booking_Id) REFERENCES Booking(booking_Id)
-);
--- Create the MAINTENANCE table
-CREATE TABLE Maintenance (
-    maintenance_Id NUMBER PRIMARY KEY,
-    cost NUMBER(10, 2),
-    status VARCHAR2(50),
-    description VARCHAR2(200),
-    date_issue_reported DATE,
-    date_issue_solved DATE,
-    room_Id NUMBER,
-    CONSTRAINT fk_maintenance_room FOREIGN KEY (room_Id) REFERENCES Room(room_Id)
-);
--- Create the SERVICE table
-CREATE TABLE Service (
-    service_Id NUMBER PRIMARY KEY,
-    name VARCHAR2(50),
-    Price NUMBER(10, 2),
-    description VARCHAR2(200),
-    Booking_Id NUMBER,
-    CONSTRAINT fk_service_booking FOREIGN KEY (Booking_Id) REFERENCES Booking(booking_Id)
-);
-
--- Create the SUPPLIER table
-CREATE TABLE Supplier (
-    Supplier_Id NUMBER PRIMARY KEY,
-    Name VARCHAR2(100),
-    email VARCHAR2(100),
-    Phone VARCHAR2(15),
-    Address VARCHAR2(200)
-);
-
--- Create the ITEM table
-CREATE TABLE Item (
-    Item_Id NUMBER PRIMARY KEY,
-    Name VARCHAR2(100),
-    Price NUMBER(10, 2),
-    Quantity NUMBER,
-    Supplier_Id NUMBER,
-    CONSTRAINT fk_item_supplier FOREIGN KEY (Supplier_Id) REFERENCES Supplier(Supplier_Id)
-);
-
--- Create the EMPLOYEE table
-CREATE TABLE Employee (
-    Employee_Id NUMBER PRIMARY KEY,
-    Name VARCHAR2(100),
-    Start_Date DATE,
-    Salary NUMBER(10, 2),
-    Phone VARCHAR2(15),
-    email VARCHAR2(100)
-);
-
--- Create the DEPARTMENT table
+-- Create the Department table
 CREATE TABLE Department (
-    Department_Id NUMBER PRIMARY KEY,
+    Department_id INT PRIMARY KEY,
     Name VARCHAR2(50),
-    Number_Of_Employees NUMBER
+    Manager_id INT
 );
-
--- Create the Feedback table
-CREATE TABLE Feedback (
-    feedback_Id NUMBER PRIMARY KEY,
-    booking_Id NUMBER,
-    rating NUMBER(1, 0) CHECK (rating BETWEEN 1 AND 5), 
-    comments VARCHAR2(500),
-    feedback_date DATE DEFAULT SYSDATE, 
-    CONSTRAINT fk_feedback_booking FOREIGN KEY (booking_Id) REFERENCES Booking(booking_Id)
+-- Create the Supplier table
+CREATE TABLE Supplier (
+    Supplier_id INT PRIMARY KEY,
+    Email VARCHAR2(100),
+    Phone VARCHAR2(20),
+    Name VARCHAR2(50),
+    Address VARCHAR2(255),
+    SDate DATE
 );
-
 -- Create the Event table
 CREATE TABLE Event (
-    event_Id NUMBER PRIMARY KEY,
-    name VARCHAR2(100),
-    type VARCHAR2(50),
-    location VARCHAR2(100),
-    event_date DATE,  -- Changed 'date' to 'event_date' to avoid conflict with reserved word 'DATE'
-    number_of_audience NUMBER,
-    organizer_name VARCHAR2(100),
-    organizer_email VARCHAR2(100),
-    organizer_phone VARCHAR2(15),
-    guest_id NUMBER,  -- Changed 'id' to 'guest_id' to match the foreign key reference
-    CONSTRAINT fk_event_guest FOREIGN KEY (guest_id) REFERENCES Guest(Guest_Id)
+    Place VARCHAR2(100),
+    Type VARCHAR2(50),
+    Name VARCHAR2(100),
+    Event_id INT PRIMARY KEY,
+    EDate DATE,
+    Number_of_attendance INT
 );
--- Insert into GUEST 
-INSERT INTO Guest VALUES (1, 'Omar', 'Ahmed', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'omar.ahmed@example.com', 'US', '1234567890', 'American');
-INSERT INTO Guest VALUES (2, 'Jana', 'Waeel', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 'jana.waeel@example.com', 'US', '0987654321', 'American');
-INSERT INTO Guest VALUES (3, 'Ahmed', 'Mohamed', TO_DATE('1982-07-25', 'YYYY-MM-DD'), 'ahmed.mohamed@example.com', 'UK', '1122334455', 'British');
+-- Create the Room table
+CREATE TABLE Room (
+    Room_id INT PRIMARY KEY,
+    RoomType VARCHAR2(50),
+    RoomCapacity INT,
+    Price NUMBER(10, 2),
+    RoomView VARCHAR2(100),
+    Availability VARCHAR2(20),
+    Booking_id INT
+);
+-- Create the Employee table
+CREATE TABLE Employee (
+    Phone VARCHAR2(20),
+    Start_date DATE,
+    Salary NUMBER(10, 2),
+    Employee_id INT PRIMARY KEY,
+    Email VARCHAR2(100),
+    F_name VARCHAR2(50),
+    L_name VARCHAR2(50),
+    Department_id INT
+);
+-- Create the Service table
+CREATE TABLE Services (
+    Price NUMBER(10, 2),
+    Name VARCHAR2(50),
+    Service_id INT PRIMARY KEY,
+    Description VARCHAR2(255),
+    Department_id INT,
+    CONSTRAINT fk_service_department FOREIGN KEY (Department_id) REFERENCES Department (Department_id)
+);
+-- Create the Guest table
+CREATE TABLE Guest (
+    Guest_id INT PRIMARY KEY,
+    Id_proof_type VARCHAR2(50),
+    Date_of_birth DATE,
+    F_name VARCHAR2(50),
+    L_name VARCHAR2(50),
+    Email VARCHAR2(100),
+    Nationality VARCHAR2(50),
+    Room_id INT,
+    CONSTRAINT fk_guest_room FOREIGN KEY (Room_id) REFERENCES Room (Room_id)
+);
+-- Create the Booking table
+CREATE TABLE Booking (
+    Booking_id INT PRIMARY KEY,
+    Booking_date DATE,
+    Status VARCHAR2(20),
+    Check_in_date DATE,
+    Check_out_date DATE,
+    Guest_id INT,
+    Num_of_guests INT,
+    CONSTRAINT fk_booking_guest FOREIGN KEY (Guest_id) REFERENCES Guest (Guest_id)
+);
+-- Create the Payment table
+CREATE TABLE Payment (
+    Payment_date DATE,
+    Payment_method VARCHAR2(50),
+    Payment_id INT PRIMARY KEY,
+    Price NUMBER(10, 2),
+    Status VARCHAR2(20)
+);
+-- Create the Item table
+CREATE TABLE Item (
+    Item_id INT PRIMARY KEY,
+    Name VARCHAR2(50),
+    Price NUMBER(10, 2),
+    Supplier_id INT,
+    Quantity INT,
+    CONSTRAINT fk_item_supplier FOREIGN KEY (Supplier_id) REFERENCES Supplier (Supplier_id)
+);
+-- Create the Maintenance table
+CREATE TABLE Maintenance (
+    Maintenance_id INT PRIMARY KEY,
+    Cost NUMBER(10, 2),
+    Status VARCHAR2(20),
+    Description VARCHAR2(255),
+    Date_issue_report DATE,
+    Date_issue_solved DATE
+);
+-- Create the EventOrganizer table
+CREATE TABLE EventOrganizer (
+    Event_id INT,
+    Name VARCHAR2(50),
+    Email VARCHAR2(100),
+    Phone VARCHAR2(20),
+    PRIMARY KEY (Event_id, Name),
+    CONSTRAINT fk_event_organizer_event FOREIGN KEY (Event_id) REFERENCES Event (Event_id)
+);
+-- Create the Feedback table
+CREATE TABLE Feedback (
+    FeedbackDate DATE,
+    Guest_id INT,
+    Rate INT,
+    FeedbackComment VARCHAR2(255),
+    CONSTRAINT fk_feedback_guest FOREIGN KEY (Guest_id) REFERENCES Guest (Guest_id)
+);
+-- Create the GuestPhoneNumber table
+CREATE TABLE GuestPhoneNumber (
+    Guest_id INT,
+    Country_key VARCHAR2(10),
+    PhoneNumber VARCHAR2(20),
+    PRIMARY KEY (Guest_id, PhoneNumber),
+    CONSTRAINT fk_guest_phone FOREIGN KEY (Guest_id) REFERENCES Guest (Guest_id)
+);
+-- Create the JoinEvent table
+CREATE TABLE JoinEvent (
+    Guest_id INT,
+    Event_id INT,
+    PRIMARY KEY (Guest_id, Event_id),
+    CONSTRAINT fk_join_guest FOREIGN KEY (Guest_id) REFERENCES Guest (Guest_id),
+    CONSTRAINT fk_join_event FOREIGN KEY (Event_id) REFERENCES Event (Event_id)
+);
+-- Create the request service table
+CREATE TABLE Request (
+    Guest_id INT,
+    Service_id INT,
+    PRIMARY KEY (Guest_id, Service_id),
+    CONSTRAINT fk_request_guest FOREIGN KEY (Guest_id) REFERENCES Guest (Guest_id),
+    CONSTRAINT fk_request_service FOREIGN KEY (Service_id) REFERENCES Services (Service_id)
+);
+-- Create the need maintance table
+CREATE TABLE Need (
+    Room_id INT,
+    Maintenance_id INT,
+    PRIMARY KEY (Room_id, Maintenance_id),
+    CONSTRAINT fk_need_room FOREIGN KEY (Room_id) REFERENCES Room (Room_id),
+    CONSTRAINT fk_need_maintenance FOREIGN KEY (Maintenance_id) REFERENCES Maintenance (Maintenance_id)
+);
+-- Create the Payment Process table
+CREATE TABLE Process (
+    Booking_id INT,
+    Payment_id INT,
+    PRIMARY KEY (Booking_id, Payment_id),
+    CONSTRAINT fk_process_booking FOREIGN KEY (Booking_id) REFERENCES Booking (Booking_id),
+    CONSTRAINT fk_process_payment FOREIGN KEY (Payment_id) REFERENCES Payment (Payment_id)
+);
+
+--Add FOREIGN KEY to Booking Table
+ALTER TABLE Booking
+    ADD CONSTRAINT fk_room_booking FOREIGN KEY (Booking_id) REFERENCES Booking (Booking_id);
+
+--Add FOREIGN KEY to Employee Table
+ALTER TABLE Employee 
+    ADD CONSTRAINT fk_employee_department FOREIGN KEY (Department_id) REFERENCES Department (Department_id);
+
 
 -- Insert into ROOM 
-INSERT INTO Room VALUES (101, 2, 100.00, 'Deluxe', 'Sea View', 'Available');
-INSERT INTO Room VALUES (102, 4, 200.00, 'Suite', 'Mountain View', 'Occupied');
-INSERT INTO Room VALUES (103, 1, 80.00, 'Standard', 'City View', 'Available');
+INSERT INTO Room VALUES (101, 'Deluxe', 2, 200.00, 'Sea View', 'Available', 1);
+INSERT INTO Room VALUES (102, 'Standard', 2, 120.00, 'City View', 'Occupied', 2);
+INSERT INTO Room VALUES (103, 'Suite', 4, 350.00, 'Mountain View', 'Available', 3);
 
--- Insert into SUPPLIER
-INSERT INTO Supplier VALUES (1, 'ABC Suppliers', 'abc@example.com', '1231231234', '123 Supplier St.');
-INSERT INTO Supplier VALUES (2, 'XYZ Supplies', 'xyz@example.com', '2342342345', '456 Supply Rd.');
-INSERT INTO Supplier VALUES (3, 'DEF Suppliers', 'def@example.com', '3453453456', '789 Supply Ave.');
+-- Insert into GUEST 
+INSERT INTO Guest VALUES (1, 'Passport', TO_DATE('1990-01-01', 'YYYY-MM-DD'), 'Omar', 'Ahmed', 'omar.ahmed@example.com', 'American', 101);
+INSERT INTO Guest VALUES (2, 'ID Card', TO_DATE('1985-05-12', 'YYYY-MM-DD'), 'Jana', 'Waeel', 'jana.waeel@example.com', 'British', 102);
+INSERT INTO Guest VALUES (3, 'Driver License', TO_DATE('1992-11-22', 'YYYY-MM-DD'), 'Ahmed', 'Mohamed', 'ahmed.mohamed@example.com', 'Canadian', 103);
 
--- Insert into ITEM 
-INSERT INTO Item VALUES (1, 'Bed', 50.00, 10, 1);
-INSERT INTO Item VALUES (2, 'Table', 30.00, 20, 2);
-INSERT INTO Item VALUES (3, 'Chair', 15.00, 30, 3);
+-- Insert into Booking
+INSERT INTO Booking VALUES (1, TO_DATE('2024-12-01', 'YYYY-MM-DD'), 'Confirmed', TO_DATE('2024-12-10', 'YYYY-MM-DD'), TO_DATE('2024-12-15', 'YYYY-MM-DD'), 1, 2);
+INSERT INTO Booking VALUES (2, TO_DATE('2024-12-02', 'YYYY-MM-DD'), 'Pending', TO_DATE('2024-12-12', 'YYYY-MM-DD'), TO_DATE('2024-12-17', 'YYYY-MM-DD'), 2, 1);
+INSERT INTO Booking VALUES (3, TO_DATE('2024-12-03', 'YYYY-MM-DD'), 'Cancelled', TO_DATE('2024-12-14', 'YYYY-MM-DD'), TO_DATE('2024-12-18', 'YYYY-MM-DD'), 3, 3);
 
--- Insert into BOOKING
-INSERT INTO Booking VALUES (1, TO_DATE('2024-12-01', 'YYYY-MM-DD'), TO_DATE('2024-12-10', 'YYYY-MM-DD'), TO_DATE('2024-12-01', 'YYYY-MM-DD'), 2, 'Confirmed', 9, 1);
-INSERT INTO Booking VALUES (2, TO_DATE('2024-12-05', 'YYYY-MM-DD'), TO_DATE('2024-12-08', 'YYYY-MM-DD'), TO_DATE('2024-12-02', 'YYYY-MM-DD'), 3, 'Pending', 3, 2);
-INSERT INTO Booking VALUES (3, TO_DATE('2024-12-10', 'YYYY-MM-DD'), TO_DATE('2024-12-15', 'YYYY-MM-DD'), TO_DATE('2024-12-05', 'YYYY-MM-DD'), 5, 'Confirmed', 5, 3);
+-- Insert into Department
+INSERT INTO Department VALUES (1, 'Sales', 101);
+INSERT INTO Department VALUES (2, 'Marketing', 102);
+INSERT INTO Department VALUES (3, 'HR', 103);
 
--- Insert into MAINTENANCE
-INSERT INTO Maintenance VALUES (1, 100.00, 'In Progress', 'Leaky faucet', TO_DATE('2024-12-01', 'YYYY-MM-DD'), NULL, 101);
-INSERT INTO Maintenance VALUES (2, 200.00, 'Completed', 'Air conditioning repair', TO_DATE('2024-11-15', 'YYYY-MM-DD'), TO_DATE('2024-11-20', 'YYYY-MM-DD'), 102);
-INSERT INTO Maintenance VALUES (3, 150.00, 'Pending', 'Electrical issue', TO_DATE('2024-12-05', 'YYYY-MM-DD'), NULL, 103);
-
--- Insert into SERVICE 
-INSERT INTO Service VALUES (1, 'Room Cleaning', 50.00, 'Daily room cleaning service', 1);
-INSERT INTO Service VALUES (2, 'Laundry', 20.00, 'Washing and drying clothes', 2);
-INSERT INTO Service VALUES (3, 'Food Delivery', 30.00, 'In-room dining service', 3);
-
--- Insert into PAYMENT
-INSERT INTO Payment VALUES (1, TO_DATE('2024-12-02', 'YYYY-MM-DD'), 'Credit Card', 200.00, 'Paid', 1);
-INSERT INTO Payment VALUES (2, TO_DATE('2024-12-03', 'YYYY-MM-DD'), 'Cash', 150.00, 'Pending', 2);
-INSERT INTO Payment VALUES (3, TO_DATE('2024-12-06', 'YYYY-MM-DD'), 'Debit Card', 100.00, 'Paid', 3);
-
--- Insert into Feedback
-INSERT INTO Feedback VALUES (1, 1, 5, 'Great stay! The room was perfect and the staff was very friendly.', SYSDATE);
-INSERT INTO Feedback VALUES (2, 2, 4, 'Nice room, but the Wi-Fi was a bit slow.', SYSDATE);
-INSERT INTO Feedback VALUES (3, 3, 3, 'The room was okay, but the air conditioning didn’t work well.', SYSDATE);
+-- Insert into Supplier
+INSERT INTO Supplier VALUES (1, 'supplier1@example.com', '123-456-7890', 'ABC Corp.', '123 Main St, City', TO_DATE('2023-01-01', 'YYYY-MM-DD'));
+INSERT INTO Supplier VALUES (2, 'supplier2@example.com', '123-456-7891', 'XYZ Ltd.', '456 Elm St, City', TO_DATE('2023-02-01', 'YYYY-MM-DD'));
+INSERT INTO Supplier VALUES (3, 'supplier3@example.com', '123-456-7892', 'PQR Inc.', '789 Oak St, City', TO_DATE('2023-03-01', 'YYYY-MM-DD'));
 
 -- Insert into Event
-INSERT INTO Event VALUES (1, 'Annual Gala', 'Social', 'Grand Hall', TO_DATE('2024-12-20', 'YYYY-MM-DD'), 200, 'John Doe', 'john.doe@example.com', '9876543210', 1);
-INSERT INTO Event VALUES (2, 'Music Festival', 'Concert', 'Main Stage', TO_DATE('2024-12-25', 'YYYY-MM-DD'), 500, 'Jane Smith', 'jane.smith@example.com', '1234567890', 2);
-INSERT INTO Event VALUES (3, 'Tech Conference', 'Conference', 'Tech Hub', TO_DATE('2025-01-10', 'YYYY-MM-DD'), 300, 'Alice Brown', 'alice.brown@example.com', '1122334455', 3);
+INSERT INTO Event VALUES ('Conference Room', 'Business', 'Tech Conference 2024', 1, TO_DATE('2024-12-10', 'YYYY-MM-DD'), 100);
+INSERT INTO Event VALUES ('Main Hall', 'Music', 'Rock Concert', 2, TO_DATE('2024-12-15', 'YYYY-MM-DD'), 500);
+INSERT INTO Event VALUES ('Auditorium', 'Theater', 'Shakespeare Play', 3, TO_DATE('2024-12-20', 'YYYY-MM-DD'), 200);
 
+-- Insert into Payment
+INSERT INTO Payment VALUES (TO_DATE('2024-12-05', 'YYYY-MM-DD'), 'Credit Card', 1, 400.00, 'Paid');
+INSERT INTO Payment VALUES (TO_DATE('2024-12-07', 'YYYY-MM-DD'), 'Cash', 2, 250.00, 'Pending');
+INSERT INTO Payment VALUES (TO_DATE('2024-12-10', 'YYYY-MM-DD'), 'Bank Transfer', 3, 600.00, 'Paid');
 
--- Insert into Employee
-INSERT INTO Employee VALUES (1, 'Omar Ali', TO_DATE('2020-01-01', 'YYYY-MM-DD'), 5000.00, '1234567890', 'omar.ali@example.com');
-INSERT INTO Employee VALUES (2, 'Mona Ahmed', TO_DATE('2019-06-15', 'YYYY-MM-DD'), 4500.00, '2345678901', 'mona.ahmed@example.com');
-INSERT INTO Employee VALUES (3, 'Sara Youssef', TO_DATE('2021-08-10', 'YYYY-MM-DD'), 6000.00, '3456789012', 'sara.youssef@example.com');
+-- Insert into Item
+INSERT INTO Item VALUES (1, 'Desk Chair', 150.00, 1, 20);
+INSERT INTO Item VALUES (2, 'Office Table', 200.00, 2, 15);
+INSERT INTO Item VALUES (3, 'Computer', 500.00, 3, 10);
 
+-- Insert into Maintenance
+INSERT INTO Maintenance VALUES (1, 150.00, 'Completed', 'AC repair in Room 101', TO_DATE('2024-12-01', 'YYYY-MM-DD'), TO_DATE('2024-12-03', 'YYYY-MM-DD'));
+INSERT INTO Maintenance VALUES (2, 100.00, 'In Progress', 'Plumbing issue in Room 102', TO_DATE('2024-12-02', 'YYYY-MM-DD'), NULL);
+INSERT INTO Maintenance VALUES (3, 200.00, 'Pending', 'Electrical issue in Room 103', TO_DATE('2024-12-03', 'YYYY-MM-DD'), NULL);
 
-ALTER TABLE Booking
-ADD room_Id NUMBER;
+-- Insert into Feedback 
+INSERT INTO Feedback VALUES (TO_DATE('2024-12-05', 'YYYY-MM-DD'), 1, 5, 'Great stay, loved the sea view and hospitality!');
+INSERT INTO Feedback VALUES (TO_DATE('2024-12-07', 'YYYY-MM-DD'), 2, 4, 'Good room, but the city view was a bit noisy.');
+INSERT INTO Feedback VALUES (TO_DATE('2024-12-10', 'YYYY-MM-DD'), 3, 3, 'Nice room, but the mountain view was obstructed.');
 
-ALTER TABLE Booking
-ADD CONSTRAINT fk_booking_room
-FOREIGN KEY (room_Id) REFERENCES Room(room_Id);
+-- Insert into process by linking booking_id with payment_id  
+INSERT INTO Process VALUES (1, 1);  
+INSERT INTO Process VALUES (2, 2);  
+INSERT INTO Process VALUES (3, 3); 
 
-UPDATE Booking
-SET room_Id = 101 
-WHERE booking_Id = 1;
+-- Insert into JoinEvent by linking Guest_id with Event_id
+INSERT INTO JoinEvent VALUES (1, 1);  
+INSERT INTO JoinEvent VALUES (2, 2);  
+INSERT INTO JoinEvent VALUES (3, 3);  
 
-UPDATE Booking
-SET room_Id = 102 
-WHERE booking_Id = 2;
+-- Insert data GuestPhoneNumber 
+INSERT INTO GuestPhoneNumber VALUES (1, 'US', '123-456-7890');  
+INSERT INTO GuestPhoneNumber VALUES (2, 'GB', '987-654-3210');  
+INSERT INTO GuestPhoneNumber VALUES (3, 'CA', '555-555-5555'); 
 
+-- Insert into Service 
+INSERT INTO Services VALUES (30.00, 'Room Service', 1, '24/7 food and drink service in your room', 1);  
+INSERT INTO Services VALUES (15.00, 'Laundry',2, 'Laundry and dry cleaning services', 2); 
+INSERT INTO Services VALUES ( 50.00, 'Spa', 3, 'Relaxing spa treatment', 3);  
 
-UPDATE Booking
-SET room_Id = 103 
-WHERE booking_Id = 3;
+-- Insert into EventOrganizer 
+INSERT INTO EventOrganizer VALUES (1, 'John Doe', 'johndoe@example.com', '123-555-7890'); 
+INSERT INTO EventOrganizer VALUES (2, 'Jane Smith', 'janesmith@example.com', '123-555-7891');
+INSERT INTO EventOrganizer VALUES (3, 'Mark Lee', 'marklee@example.com', '123-555-7892'); 
 
+-- Insert  into Employee
+INSERT INTO Employee VALUES (1, 'Sarah', 'Johnson', 'sarah.johnson@example.com', '123-555-7890', TO_DATE('2024-01-15', 'YYYY-MM-DD'), 4500.00, 1);  
+INSERT INTO Employee VALUES (2, 'David', 'Williams', 'david.williams@example.com', '123-555-7891', TO_DATE('2024-02-01', 'YYYY-MM-DD'), 5000.00, 2);  
+INSERT INTO Employee VALUES (3, 'Emily', 'Smith', 'emily.smith@example.com', '123-555-7892', TO_DATE('2024-03-10', 'YYYY-MM-DD'), 6000.00, 3);  
+
+-- Insert  into Request service
+INSERT INTO Request VALUES (1, 1);  
+INSERT INTO Request VALUES (2, 2);  
+INSERT INTO Request VALUES (3, 3);  
+
+-- Insert into Need 
+INSERT INTO Need VALUES (101, 1);)
+INSERT INTO Need VALUES (102, 2);  
+INSERT INTO Need VALUES (103, 3);  
 
